@@ -2,11 +2,12 @@ import type { Metadata } from 'next'
 import { GeistSans } from 'geist/font/sans'
 import { GeistMono } from 'geist/font/mono'
 import { Analytics } from '@vercel/analytics/next'
+import { ClientLayout } from '@/app/client-layout'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'v0 App',
-  description: 'Created with v0',
+  title: 'AGI-OS-DAO',
+  description: 'Decentralized AI Operating System',
   generator: 'v0.app',
 }
 
@@ -27,8 +28,10 @@ html {
         `}</style>
       </head>
       <body>
-        {children}
-        <Analytics />
+        <ClientLayout>
+          {children}
+          <Analytics />
+        </ClientLayout>
       </body>
     </html>
   )

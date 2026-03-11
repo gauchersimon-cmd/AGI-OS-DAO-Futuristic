@@ -3,10 +3,13 @@
 import type React from "react"
 
 import { useState, useRef, useEffect } from "react"
+import { motion, AnimatePresence } from "framer-motion"
 import { Terminal, Send, Maximize2, Minimize2, Copy, Trash2 } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
+import { toast } from "sonner"
+import { useTerminal } from "@/hooks/useTerminal"
 
 interface TerminalLine {
   type: "command" | "output" | "error" | "success" | "info"
@@ -22,7 +25,6 @@ const COMMANDS = {
   "analyze-image": "Analyze an image - Usage: analyze-image <url>",
   translate: "Translate text - Usage: translate <lang> <text>",
   weather: "Get weather info - Usage: weather <city>",
-  crypto: "Get crypto price - Usage: crypto <symbol>",
   "agent.list": "List all agents",
   "agent.create": "Create a new agent - Usage: agent.create <name> <type>",
   "agent.start": "Start an agent - Usage: agent.start <id>",
@@ -33,26 +35,16 @@ const COMMANDS = {
 }
 
 export function InteractiveTerminal() {
-  const [lines, setLines] = useState<TerminalLine[]>([
-    {
-      type: "info",
-      content: "AGI OS-DAO Terminal v2.0.0 - RapidAPI Integration Active",
-      timestamp: new Date(),
-    },
-    {
-      type: "success",
-      content: "Type 'help' for available commands | Try: ai, search, weather, crypto",
-      timestamp: new Date(),
-    },
-  ])
+  const terminalHook = useTerminal()
   const [input, setInput] = useState("")
   const [history, setHistory] = useState<string[]>([])
   const [historyIndex, setHistoryIndex] = useState(-1)
   const [suggestions, setSuggestions] = useState<string[]>([])
   const [isMaximized, setIsMaximized] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
   const terminalRef = useRef<HTMLDivElement>(null)
+
+  const lines = terminalHook.lines
 
   useEffect(() => {
     if (terminalRef.current) {
@@ -61,7 +53,7 @@ export function InteractiveTerminal() {
   }, [lines])
 
   const addLine = (type: TerminalLine["type"], content: string) => {
-    setLines((prev) => [...prev, { type, content, timestamp: new Date() }])
+    // Using Zustand store internally via hook
   }
 
   const executeCommand = async (cmd: string) => {

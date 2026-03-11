@@ -14,6 +14,9 @@ importers:
       '@hookform/resolvers':
         specifier: ^3.9.1
         version: 3.9.1(react-hook-form@7.54.1(react@19.0.0))
+      '@monaco-editor/react':
+        specifier: ^4.7.0
+        version: 4.7.0(monaco-editor@0.55.1)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       '@radix-ui/react-accordion':
         specifier: 1.2.2
         version: 1.2.2(@types/react-dom@18.0.0)(@types/react@18.0.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
@@ -101,6 +104,9 @@ importers:
       '@supabase/supabase-js':
         specifier: latest
         version: 2.78.0
+      '@tanstack/react-query':
+        specifier: ^5.90.21
+        version: 5.90.21(react@19.0.0)
       '@vercel/analytics':
         specifier: latest
         version: 1.5.0(next@14.2.25(@opentelemetry/api@1.9.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react@19.0.0)
@@ -125,6 +131,9 @@ importers:
       embla-carousel-react:
         specifier: 8.5.1
         version: 8.5.1(react@19.0.0)
+      framer-motion:
+        specifier: ^12.35.2
+        version: 12.35.2(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       geist:
         specifier: latest
         version: 1.5.1(next@14.2.25(@opentelemetry/api@1.9.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))
@@ -158,6 +167,9 @@ importers:
       recharts:
         specifier: 2.15.0
         version: 2.15.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      socket.io-client:
+        specifier: ^4.8.3
+        version: 4.8.3
       sonner:
         specifier: ^1.7.1
         version: 1.7.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
@@ -173,6 +185,9 @@ importers:
       zod:
         specifier: ^3.24.1
         version: 3.24.1
+      zustand:
+        specifier: ^5.0.11
+        version: 5.0.11(@types/react@18.0.0)(react@19.0.0)(use-sync-external-store@1.6.0(react@19.0.0))
     devDependencies:
       '@types/node':
         specifier: ^22
@@ -269,6 +284,16 @@ packages:
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
 
+  '@monaco-editor/loader@1.7.0':
+    resolution: {integrity: sha512-gIwR1HrJrrx+vfyOhYmCZ0/JcWqG5kbfG7+d3f/C1LXk2EvzAbHSg3MQ5lO2sMlo9izoAZ04shohfKLVT6crVA==}
+
+  '@monaco-editor/react@4.7.0':
+    resolution: {integrity: sha512-cyzXQCtO47ydzxpQtCGSQGOC8Gk3ZUeBXFAxD+CWXYFo5OqZyZUonFl0DwUlTyAfRHntBfw2p3w4s9R6oe1eCA==}
+    peerDependencies:
+      monaco-editor: '>= 0.25.0 < 1'
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+
   '@next/env@14.2.25':
     resolution: {integrity: sha512-JnzQ2cExDeG7FxJwqAksZ3aqVJrHjFwZQAEJ9gQZSoEhIow7SNoKZzju/AwQ+PLIR4NY8V0rhcVozx/2izDO0w==}
 
@@ -289,24 +314,28 @@ packages:
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [linux]
+    libc: [glibc]
 
   '@next/swc-linux-arm64-musl@14.2.25':
     resolution: {integrity: sha512-QC5y5PPTmtqFExcKWKYgUNkHeHE/z3lUsu83di488nyP0ZzQ3Yse2G6TCxz6nNsQwgAx1BehAJTZez+UQxzLfw==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [linux]
+    libc: [musl]
 
   '@next/swc-linux-x64-gnu@14.2.25':
     resolution: {integrity: sha512-y6/ML4b9eQ2D/56wqatTJN5/JR8/xdObU2Fb1RBidnrr450HLCKr6IJZbPqbv7NXmje61UyxjF5kvSajvjye5w==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [linux]
+    libc: [glibc]
 
   '@next/swc-linux-x64-musl@14.2.25':
     resolution: {integrity: sha512-sPX0TSXHGUOZFvv96GoBXpB3w4emMqKeMgemrSxI7A6l55VBJp/RKYLwZIB9JxSqYPApqiREaIIap+wWq0RU8w==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [linux]
+    libc: [musl]
 
   '@next/swc-win32-arm64-msvc@14.2.25':
     resolution: {integrity: sha512-ReO9S5hkA1DU2cFCsGoOEp7WJkhFzNbU/3VUF6XxNGUCQChyug6hZdYL/istQgfT/GWE6PNIg9cm784OI4ddxQ==}
@@ -1240,6 +1269,9 @@ packages:
   '@radix-ui/rect@1.1.1':
     resolution: {integrity: sha512-HPwpGIzkl28mWyZqG52jiqDJ12waP11Pa1lGoiyUkIEuMLBP0oeK/C89esbXrxsky5we7dfd8U58nm0SgAWpVw==}
 
+  '@socket.io/component-emitter@3.1.2':
+    resolution: {integrity: sha512-9BCxFwvbGg/RsZK9tjXd8s4UcwR0MWeFQ1XEKIQVVvAGJyINdrqKMcTRyLoK8Rse1GjzLV9cwjWV1olXRWEXVA==}
+
   '@standard-schema/spec@1.0.0':
     resolution: {integrity: sha512-m2bOd0f2RT9k8QJx1JN85cZYyH1RqFBdlwtkSlf4tBDYLCiiZnv1fIIwacK6cqwXavOydf0NPToMQgpKq+dVlA==}
 
@@ -1275,6 +1307,14 @@ packages:
 
   '@swc/helpers@0.5.5':
     resolution: {integrity: sha512-KGYxvIOXcceOAbEk4bi/dVLEK9z8sZ0uBB3Il5b1rhfClSpcX0yfRO0KmTkqR2cnQDymwLB+25ZyMzICg/cm/A==}
+
+  '@tanstack/query-core@5.90.20':
+    resolution: {integrity: sha512-OMD2HLpNouXEfZJWcKeVKUgQ5n+n3A2JFmBaScpNDUqSrQSjiveC7dKMe53uJUg1nDG16ttFPz2xfilz6i2uVg==}
+
+  '@tanstack/react-query@5.90.21':
+    resolution: {integrity: sha512-0Lu6y5t+tvlTJMTO7oh5NSpJfpg/5D41LlThfepTixPYkJ0sE2Jj0m0f6yYqujBwIXlId87e234+MxG3D3g7kg==}
+    peerDependencies:
+      react: ^18 || ^19
 
   '@types/d3-array@3.2.2':
     resolution: {integrity: sha512-hOLWVbm7uRza0BYXpIIW5pxfrKe0W+D5lrFiAEYR+pb6w3N2SwSMaJbXdUfSEv+dT4MfHBLtn5js0LAWaO6otw==}
@@ -1320,6 +1360,9 @@ packages:
 
   '@types/scheduler@0.26.0':
     resolution: {integrity: sha512-WFHp9YUJQ6CKshqoC37iOlHnQSmxNc795UhB26CyBBttrN9svdIrUjl/NjnNmfcwtncN0h/0PPAFWv9ovP8mLA==}
+
+  '@types/trusted-types@2.0.7':
+    resolution: {integrity: sha512-ScaPdn1dQczgbl0QFTeTOmVHFULt394XJgOQNoyVhZ6r2vLnMLJfBPd53SB52T/3G36VI1/g2MZaX0cwDuXsfw==}
 
   '@types/ws@8.18.1':
     resolution: {integrity: sha512-ThVF6DCVhA8kUGy+aazFQ4kXQ7E1Ty7A3ypFOe0IcJV8O/M511G99AW24irKrW56Wt44yG9+ij8FaqoBGkuBXg==}
@@ -1528,6 +1571,15 @@ packages:
   date-fns@4.1.0:
     resolution: {integrity: sha512-Ukq0owbQXxa/U3EGtsdVBkR1w7KOQ5gIBqdH2hkvknzZPYvBxb/aa6E8L7tmjFtkwZBu3UXBbjIgPo/Ez4xaNg==}
 
+  debug@4.4.3:
+    resolution: {integrity: sha512-RGwwWnwQvkVfavKVt22FGLw+xYSdzARwm0ru6DhTVA3umU5hZc28V3kO4stgYryrTlLpuvgI9GiijltAjNbcqA==}
+    engines: {node: '>=6.0'}
+    peerDependencies:
+      supports-color: '*'
+    peerDependenciesMeta:
+      supports-color:
+        optional: true
+
   decimal.js-light@2.5.1:
     resolution: {integrity: sha512-qIMFpTMZmny+MMIitAB6D7iVPEorVw6YQRWkvarTkT4tBeSLLiHzcwj6q0MmYSFCiVpiqPJTJEYIrpcPzVEIvg==}
 
@@ -1546,6 +1598,9 @@ packages:
 
   dom-helpers@5.2.1:
     resolution: {integrity: sha512-nRCa7CK3VTrM2NmGkIy4cbK7IZlgBE/PYMn55rrXefr5xXDP0LdtfPnblFDoVdcAfslJ7or6iqAUnx0CCGIWQA==}
+
+  dompurify@3.2.7:
+    resolution: {integrity: sha512-WhL/YuveyGXJaerVlMYGWhvQswa7myDG17P7Vu65EWC05o8vfeNbvNf4d/BOvH99+ZW+LlQsc1GDKMa1vNK6dw==}
 
   eastasianwidth@0.2.0:
     resolution: {integrity: sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==}
@@ -1571,6 +1626,13 @@ packages:
 
   emoji-regex@9.2.2:
     resolution: {integrity: sha512-L18DaJsXSUk2+42pv8mLs5jJT2hqFkFE4j21wOmgbUqsZ2hL72NsUU785g9RXgo3s0ZNgVl42TiHp3ZtOv/Vyg==}
+
+  engine.io-client@6.6.4:
+    resolution: {integrity: sha512-+kjUJnZGwzewFDw951CDWcwj35vMNf2fcj7xQWOctq1F2i1jkDdVvdFG9kM/BEChymCH36KgjnW0NsL58JYRxw==}
+
+  engine.io-parser@5.2.3:
+    resolution: {integrity: sha512-HqD3yTBfnBxIrbnM1DoD6Pcq8NECnh8d4As1Qgh0z5Gg3jRRIqijury0CL3ghu/edArpUYiYqQiDUQBIs4np3Q==}
+    engines: {node: '>=10.0.0'}
 
   escalade@3.2.0:
     resolution: {integrity: sha512-WUj2qlxaQtO4g6Pq5c29GTcWGDyd8itL8zTlipgECz3JesAiiOKotd8JU6otB3PACgG6xkJUyVhboMS+bje/jA==}
@@ -1604,6 +1666,20 @@ packages:
 
   fraction.js@4.3.7:
     resolution: {integrity: sha512-ZsDfxO51wGAXREY55a7la9LScWpwv9RxIrYABrlvOFBlH/ShPnrtsXeuUIfXKKOVicNxQ+o8JTbJvjS4M89yew==}
+
+  framer-motion@12.35.2:
+    resolution: {integrity: sha512-dhfuEMaNo0hc+AEqyHiIfiJRNb9U9UQutE9FoKm5pjf7CMitp9xPEF1iWZihR1q86LBmo6EJ7S8cN8QXEy49AA==}
+    peerDependencies:
+      '@emotion/is-prop-valid': '*'
+      react: ^18.0.0 || ^19.0.0
+      react-dom: ^18.0.0 || ^19.0.0
+    peerDependenciesMeta:
+      '@emotion/is-prop-valid':
+        optional: true
+      react:
+        optional: true
+      react-dom:
+        optional: true
 
   fsevents@2.3.3:
     resolution: {integrity: sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==}
@@ -1713,6 +1789,11 @@ packages:
     peerDependencies:
       react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0-rc
 
+  marked@14.0.0:
+    resolution: {integrity: sha512-uIj4+faQ+MgHgwUW1l2PsPglZLOLOT1uErt06dAPtx2kjteLAkbsd/0FiYg/MGS+i7ZKLb7w2WClxHkzOOuryQ==}
+    engines: {node: '>= 18'}
+    hasBin: true
+
   merge2@1.4.1:
     resolution: {integrity: sha512-8q7VEgMJW4J8tcfVPy8g09NcQwZdbwFEqhe/WZkoIzjn/3TGDwtOCYtXGxA3O8tPzpczCCDgv+P2P5y00ZJOOg==}
     engines: {node: '>= 8'}
@@ -1728,6 +1809,18 @@ packages:
   minipass@7.1.2:
     resolution: {integrity: sha512-qOOzS1cBTWYF4BH8fVePDBOO9iptMnGUEZwNc/cMWnTV2nVLZ7VoNWEPHkYczZA0pdoA7dl6e7FL659nX9S2aw==}
     engines: {node: '>=16 || 14 >=14.17'}
+
+  monaco-editor@0.55.1:
+    resolution: {integrity: sha512-jz4x+TJNFHwHtwuV9vA9rMujcZRb0CEilTEwG2rRSpe/A7Jdkuj8xPKttCgOh+v/lkHy7HsZ64oj+q3xoAFl9A==}
+
+  motion-dom@12.35.2:
+    resolution: {integrity: sha512-pWXFMTwvGDbx1Fe9YL5HZebv2NhvGBzRtiNUv58aoK7+XrsuaydQ0JGRKK2r+bTKlwgSWwWxHbP5249Qr/BNpg==}
+
+  motion-utils@12.29.2:
+    resolution: {integrity: sha512-G3kc34H2cX2gI63RqU+cZq+zWRRPSsNIOjpdl9TN4AQwC4sgwYPl/Q/Obf/d53nOm569T0fYK+tcoSV50BWx8A==}
+
+  ms@2.1.3:
+    resolution: {integrity: sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==}
 
   mz@2.7.0:
     resolution: {integrity: sha512-z81GNO7nnYMEhrGh9LeymoE4+Yr0Wn5McHIZMK5cfQCl+NDX08sCZgUc9/6MHni9IWuFLm1Z3HTCXu2z9fN62Q==}
@@ -1979,6 +2072,14 @@ packages:
     resolution: {integrity: sha512-bzyZ1e88w9O1iNJbKnOlvYTrWPDl46O1bG0D3XInv+9tkPrxrN8jUUTiFlDkkmKWgn1M6CfIA13SuGqOa9Korw==}
     engines: {node: '>=14'}
 
+  socket.io-client@4.8.3:
+    resolution: {integrity: sha512-uP0bpjWrjQmUt5DTHq9RuoCBdFJF10cdX9X+a368j/Ft0wmaVgxlrjvK3kjvgCODOMMOz9lcaRzxmso0bTWZ/g==}
+    engines: {node: '>=10.0.0'}
+
+  socket.io-parser@4.2.5:
+    resolution: {integrity: sha512-bPMmpy/5WWKHea5Y/jYAP6k74A+hvmRCQaJuJB6I/ML5JZq/KfNieUVo/3Mh7SAqn7TyFdIo6wqYHInG1MU1bQ==}
+    engines: {node: '>=10.0.0'}
+
   sonner@1.7.1:
     resolution: {integrity: sha512-b6LHBfH32SoVasRFECrdY8p8s7hXPDn3OHUFbZZbiB1ctLS9Gdh6rpX2dVrpQA0kiL5jcRzDDldwwLkSKk3+QQ==}
     peerDependencies:
@@ -1988,6 +2089,9 @@ packages:
   source-map-js@1.2.1:
     resolution: {integrity: sha512-UXWMKhLOwVKb728IUtQPXxfYU+usdybtUrK/8uGE8CQMvrhOpwvzDBwj0QhSL7MQc7vIsISBG8VQ8+IDQxpfQA==}
     engines: {node: '>=0.10.0'}
+
+  state-local@1.0.7:
+    resolution: {integrity: sha512-HTEHMNieakEnoe33shBYcZ7NX83ACUjCu8c40iOGEZsngj9zRnkqS9j1pqQPXwobB0ZcVTk27REb7COQ0UR59w==}
 
   streamsearch@1.1.0:
     resolution: {integrity: sha512-Mcc5wHehp9aXz1ax6bZUyY5afg9u2rv5cqQI3mRrYkGC8rW2hM02jWuwjtL++LS5qinSyhj2QfLyNsuc+VsExg==}
@@ -2158,6 +2262,10 @@ packages:
       utf-8-validate:
         optional: true
 
+  xmlhttprequest-ssl@2.1.2:
+    resolution: {integrity: sha512-TEU+nJVUUnA4CYJFLvK5X9AOeH4KvDvhIfm0vV1GaQRtchnG0hgK5p8hw/xjv8cunWYCsiPCSDzObPyhEwq3KQ==}
+    engines: {node: '>=0.4.0'}
+
   yaml@2.8.1:
     resolution: {integrity: sha512-lcYcMxX2PO9XMGvAJkJ3OsNMw+/7FKes7/hgerGUYWIoWu5j/+YQqcZr5JnPZWzOsEBgMbSbiSTn/dv/69Mkpw==}
     engines: {node: '>= 14.6'}
@@ -2165,6 +2273,24 @@ packages:
 
   zod@3.24.1:
     resolution: {integrity: sha512-muH7gBL9sI1nciMZV67X5fTKKBLtwpZ5VBp1vsOQzj1MhrBZ4wlVCm3gedKZWLp0Oyel8sIGfeiz54Su+OVT+A==}
+
+  zustand@5.0.11:
+    resolution: {integrity: sha512-fdZY+dk7zn/vbWNCYmzZULHRrss0jx5pPFiOuMZ/5HJN6Yv3u+1Wswy/4MpZEkEGhtNH+pwxZB8OKgUBPzYAGg==}
+    engines: {node: '>=12.20.0'}
+    peerDependencies:
+      '@types/react': '>=18.0.0'
+      immer: '>=9.0.6'
+      react: '>=18.0.0'
+      use-sync-external-store: '>=1.2.0'
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+      immer:
+        optional: true
+      react:
+        optional: true
+      use-sync-external-store:
+        optional: true
 
 snapshots:
 
@@ -2245,6 +2371,17 @@ snapshots:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
+
+  '@monaco-editor/loader@1.7.0':
+    dependencies:
+      state-local: 1.0.7
+
+  '@monaco-editor/react@4.7.0(monaco-editor@0.55.1)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)':
+    dependencies:
+      '@monaco-editor/loader': 1.7.0
+      monaco-editor: 0.55.1
+      react: 19.0.0
+      react-dom: 19.0.0(react@19.0.0)
 
   '@next/env@14.2.25': {}
 
@@ -3195,6 +3332,8 @@ snapshots:
 
   '@radix-ui/rect@1.1.1': {}
 
+  '@socket.io/component-emitter@3.1.2': {}
+
   '@standard-schema/spec@1.0.0': {}
 
   '@supabase/auth-js@2.78.0':
@@ -3256,6 +3395,13 @@ snapshots:
       '@swc/counter': 0.1.3
       tslib: 2.8.1
 
+  '@tanstack/query-core@5.90.20': {}
+
+  '@tanstack/react-query@5.90.21(react@19.0.0)':
+    dependencies:
+      '@tanstack/query-core': 5.90.20
+      react: 19.0.0
+
   '@types/d3-array@3.2.2': {}
 
   '@types/d3-color@3.1.3': {}
@@ -3299,6 +3445,9 @@ snapshots:
       csstype: 3.1.3
 
   '@types/scheduler@0.26.0': {}
+
+  '@types/trusted-types@2.0.7':
+    optional: true
 
   '@types/ws@8.18.1':
     dependencies:
@@ -3476,6 +3625,10 @@ snapshots:
 
   date-fns@4.1.0: {}
 
+  debug@4.4.3:
+    dependencies:
+      ms: 2.1.3
+
   decimal.js-light@2.5.1: {}
 
   dequal@2.0.3: {}
@@ -3490,6 +3643,10 @@ snapshots:
     dependencies:
       '@babel/runtime': 7.28.4
       csstype: 3.1.3
+
+  dompurify@3.2.7:
+    optionalDependencies:
+      '@types/trusted-types': 2.0.7
 
   eastasianwidth@0.2.0: {}
 
@@ -3510,6 +3667,20 @@ snapshots:
   emoji-regex@8.0.0: {}
 
   emoji-regex@9.2.2: {}
+
+  engine.io-client@6.6.4:
+    dependencies:
+      '@socket.io/component-emitter': 3.1.2
+      debug: 4.4.3
+      engine.io-parser: 5.2.3
+      ws: 8.18.3
+      xmlhttprequest-ssl: 2.1.2
+    transitivePeerDependencies:
+      - bufferutil
+      - supports-color
+      - utf-8-validate
+
+  engine.io-parser@5.2.3: {}
 
   escalade@3.2.0: {}
 
@@ -3541,6 +3712,15 @@ snapshots:
       signal-exit: 4.1.0
 
   fraction.js@4.3.7: {}
+
+  framer-motion@12.35.2(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
+    dependencies:
+      motion-dom: 12.35.2
+      motion-utils: 12.29.2
+      tslib: 2.8.1
+    optionalDependencies:
+      react: 19.0.0
+      react-dom: 19.0.0(react@19.0.0)
 
   fsevents@2.3.3:
     optional: true
@@ -3631,6 +3811,8 @@ snapshots:
     dependencies:
       react: 19.0.0
 
+  marked@14.0.0: {}
+
   merge2@1.4.1: {}
 
   micromatch@4.0.8:
@@ -3643,6 +3825,19 @@ snapshots:
       brace-expansion: 2.0.2
 
   minipass@7.1.2: {}
+
+  monaco-editor@0.55.1:
+    dependencies:
+      dompurify: 3.2.7
+      marked: 14.0.0
+
+  motion-dom@12.35.2:
+    dependencies:
+      motion-utils: 12.29.2
+
+  motion-utils@12.29.2: {}
+
+  ms@2.1.3: {}
 
   mz@2.7.0:
     dependencies:
@@ -3881,12 +4076,32 @@ snapshots:
 
   signal-exit@4.1.0: {}
 
+  socket.io-client@4.8.3:
+    dependencies:
+      '@socket.io/component-emitter': 3.1.2
+      debug: 4.4.3
+      engine.io-client: 6.6.4
+      socket.io-parser: 4.2.5
+    transitivePeerDependencies:
+      - bufferutil
+      - supports-color
+      - utf-8-validate
+
+  socket.io-parser@4.2.5:
+    dependencies:
+      '@socket.io/component-emitter': 3.1.2
+      debug: 4.4.3
+    transitivePeerDependencies:
+      - supports-color
+
   sonner@1.7.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
     dependencies:
       react: 19.0.0
       react-dom: 19.0.0(react@19.0.0)
 
   source-map-js@1.2.1: {}
+
+  state-local@1.0.7: {}
 
   streamsearch@1.1.0: {}
 
@@ -4070,6 +4285,14 @@ snapshots:
 
   ws@8.18.3: {}
 
+  xmlhttprequest-ssl@2.1.2: {}
+
   yaml@2.8.1: {}
 
   zod@3.24.1: {}
+
+  zustand@5.0.11(@types/react@18.0.0)(react@19.0.0)(use-sync-external-store@1.6.0(react@19.0.0)):
+    optionalDependencies:
+      '@types/react': 18.0.0
+      react: 19.0.0
+      use-sync-external-store: 1.6.0(react@19.0.0)

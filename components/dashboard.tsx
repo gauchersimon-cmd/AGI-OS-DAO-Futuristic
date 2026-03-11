@@ -1,7 +1,7 @@
 "use client"
 
 import { TooltipContent } from "@/components/ui/tooltip"
-
+import { motion } from "framer-motion"
 import { useEffect, useState, useRef } from "react"
 import {
   AlertCircle,
@@ -30,6 +30,7 @@ import {
   Vote,
   Zap,
 } from "lucide-react"
+import { toast } from "sonner"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
@@ -44,9 +45,12 @@ import { AgentOrchestrator } from "@/components/agent-orchestrator"
 import { InteractiveTerminal } from "@/components/interactive-terminal"
 import { MemoryKnowledgeBase } from "@/components/memory-knowledge-base"
 import { ToolMarketplace } from "@/components/tool-marketplace"
-import { DaoGovernance } from "@/components/dao-governance" // Added DaoGovernance import
-import { AdvancedAnalytics } from "@/components/advanced-analytics" // Added AdvancedAnalytics import
-import { APIManager } from "@/components/api-manager" // Added APIManager import
+import { DaoGovernance } from "@/components/dao-governance"
+import { AdvancedAnalytics } from "@/components/advanced-analytics"
+import { APIManager } from "@/components/api-manager"
+import { AnimatedCard } from "@/components/ui/animated-card"
+import { RealtimeMetrics } from "@/components/realtime-metrics"
+import { AgentActivityGraph } from "@/components/agent-activity-graph"
 
 export default function Dashboard() {
   const [theme, setTheme] = useState<"dark" | "light">("dark")
