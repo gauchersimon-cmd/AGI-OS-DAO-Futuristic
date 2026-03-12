@@ -1,9 +1,7 @@
 "use client"
 
 import type React from "react"
-
 import { useChat } from "@ai-sdk/react"
-import { DefaultChatTransport } from "ai"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -19,18 +17,14 @@ interface AgentChatProps {
 
 export function AgentChat({ agentId, agentName, specialization, onClose }: AgentChatProps) {
   const [input, setInput] = useState("")
-
-  const { messages, sendMessage, status } = useChat({
-    transport: new DefaultChatTransport({
-      api: "/api/agent/chat",
-      body: { agentId, specialization },
-    }),
+  const { messages, input: chatInput, handleInputChange, handleSubmit, isLoading } = useChat({
+    api: "/api/agent/chat",
+    body: { agentId, specialization },
   })
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const onSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    if (!input.trim()) return
-    sendMessage({ text: input })
+    handleSubmit(e)
     setInput("")
   }
 
@@ -53,32 +47,14 @@ export function AgentChat({ agentId, agentName, specialization, onClose }: Agent
         <ScrollArea className="flex-1 p-4">
           <div className="space-y-4">
             {messages.map((message) => (
-              <div
-                key={message.id}
-                className={`flex gap-3 ${message.role === "user" ? "justify-end" : "justify-start"}`}
-              >
+              <div key={message.id} className={`flex gap-3 ${message.role === "user" ? "justify-end" : "justify-start"}`}>
                 {message.role === "assistant" && (
                   <div className="flex justify-center items-center w-8 h-8 bg-cyan-500/20 rounded-full border border-cyan-500/30">
                     <Bot className="w-4 h-4 text-cyan-400" />
                   </div>
                 )}
-                <div
-                  className={`max-w-[70%] rounded-lg p-3 ${
-                    message.role === "user"
-                      ? "bg-purple-500/20 border border-purple-500/30"
-                      : "bg-slate-800/50 border border-cyan-500/20"
-                  }`}
-                >
-                  {message.parts.map((part, idx) => {
-                    if (part.type === "text") {
-                      return (
-                        <p key={idx} className="text-sm text-white whitespace-pre-wrap">
-                          {part.text}
-                        </p>
-                      )
-                    }
-                    return null
-                  })}
+                <div className={`max-w-[70%] rounded-lg p-3 ${message.role === "user" ? "bg-purple-500/20 border border-purple-500/30" : "bg-slate-800/50 border border-cyan-500/20"}`}>
+                  <p className="text-sm text-white whitespace-pre-wrap">{message.content}</p>
                 </div>
                 {message.role === "user" && (
                   <div className="flex justify-center items-center w-8 h-8 bg-purple-500/20 rounded-full border border-purple-500/30">
@@ -87,25 +63,16 @@ export function AgentChat({ agentId, agentName, specialization, onClose }: Agent
                 )}
               </div>
             ))}
-            {status === "streaming" || status === "submitted" && (
+            {isLoading && (
               <div className="flex gap-3 justify-start">
                 <div className="flex justify-center items-center w-8 h-8 bg-cyan-500/20 rounded-full border border-cyan-500/30">
                   <Bot className="w-4 h-4 text-cyan-400 animate-pulse" />
                 </div>
                 <div className="p-3 bg-slate-800/50 rounded-lg border border-cyan-500/20">
                   <div className="flex gap-1">
-                    <div
-                      className="w-2 h-2 bg-cyan-400 rounded-full animate-bounce"
-                      style={{ animationDelay: "0ms" }}
-                    />
-                    <div
-                      className="w-2 h-2 bg-cyan-400 rounded-full animate-bounce"
-                      style={{ animationDelay: "150ms" }}
-                    />
-                    <div
-                      className="w-2 h-2 bg-cyan-400 rounded-full animate-bounce"
-                      style={{ animationDelay: "300ms" }}
-                    />
+                    <div className="w-2 h-2 bg-cyan-400 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
+                    <div className="w-2 h-2 bg-cyan-400 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
+                    <div className="w-2 h-2 bg-cyan-400 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
                   </div>
                 </div>
               </div>
@@ -113,20 +80,19 @@ export function AgentChat({ agentId, agentName, specialization, onClose }: Agent
           </div>
         </ScrollArea>
 
-        <form onSubmit={handleSubmit} className="p-4 border-t border-cyan-500/30 bg-slate-900/50">
+        <form onSubmit={onSubmit} className="p-4 border-t border-cyan-500/30 bg-slate-900/50">
           <div className="flex gap-2">
             <Input
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
+              value={input || chatInput}
+              onChange={(e) => {
+                setInput(e.target.value)
+                handleInputChange(e)
+              }}
               placeholder="Message the agent..."
-              disabled={status === "streaming" || status === "submitted"}
+              disabled={isLoading}
               className="flex-1 bg-slate-800/50 border-cyan-500/30 text-white placeholder:text-slate-500"
             />
-            <Button
-              type="submit"
-              disabled={status === "streaming" || status === "submitted" || !input.trim()}
-              className="bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-600 hover:to-purple-600"
-            >
+            <Button type="submit" disabled={isLoading || !input.trim()} className="bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-600 hover:to-purple-600">
               <Send className="w-4 h-4" />
             </Button>
           </div>
