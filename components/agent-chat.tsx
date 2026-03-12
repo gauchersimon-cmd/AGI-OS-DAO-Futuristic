@@ -87,7 +87,7 @@ export function AgentChat({ agentId, agentName, specialization, onClose }: Agent
                 )}
               </div>
             ))}
-            {status === "in_progress" && (
+            {status === "streaming" || status === "submitted" && (
               <div className="flex gap-3 justify-start">
                 <div className="flex justify-center items-center w-8 h-8 bg-cyan-500/20 rounded-full border border-cyan-500/30">
                   <Bot className="w-4 h-4 text-cyan-400 animate-pulse" />
@@ -119,12 +119,12 @@ export function AgentChat({ agentId, agentName, specialization, onClose }: Agent
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Message the agent..."
-              disabled={status === "in_progress"}
+              disabled={status === "streaming" || status === "submitted"}
               className="flex-1 bg-slate-800/50 border-cyan-500/30 text-white placeholder:text-slate-500"
             />
             <Button
               type="submit"
-              disabled={status === "in_progress" || !input.trim()}
+              disabled={status === "streaming" || status === "submitted" || !input.trim()}
               className="bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-600 hover:to-purple-600"
             >
               <Send className="w-4 h-4" />
