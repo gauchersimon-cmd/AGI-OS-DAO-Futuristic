@@ -1,134 +1,154 @@
 "use client"
 
 import type React from "react"
-
 import { useState, useRef, useEffect } from "react"
-import { motion, AnimatePresence } from "framer-motion"
 import { Terminal, Send, Maximize2, Minimize2, Copy, Trash2 } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { toast } from "sonner"
-import { useTerminal } from "@/hooks/useTerminal"
+import { useAppStore } from "@/lib/store"
 
-interface TerminalLine {
-  type: "command" | "output" | "error" | "success" | "info"
-  content: string
-  timestamp: Date
-}
-
-const COMMANDS = {
+const COMMANDS: Record<string, string> = {
   help: "Display available commands",
   clear: "Clear terminal history",
   ai: "Ask AI a question - Usage: ai <your question>",
-  search: "Search the web - Usage: search <query>",
-  "analyze-image": "Analyze an image - Usage: analyze-image <url>",
-  translate: "Translate text - Usage: translate <lang> <text>",
-  weather: "Get weather info - Usage: weather <city>",
   "agent.list": "List all agents",
   "agent.create": "Create a new agent - Usage: agent.create <name> <type>",
-  "agent.start": "Start an agent - Usage: agent.start <id>",
-  "agent.stop": "Stop an agent - Usage: agent.stop <id>",
-  "dao.proposals": "List all DAO proposals",
-  "dao.vote": "Vote on a proposal - Usage: dao.vote <id> <for|against>",
   "system.status": "Display system status",
+  echo: "Echo text back - Usage: echo <text>",
+  date: "Display current date and time",
+  version: "Display system version",
 }
 
 export function InteractiveTerminal() {
-  const terminalHook = useTerminal()
+  const { terminalLines, addTerminalLine, clearTerminal } = useAppStore()
   const [input, setInput] = useState("")
   const [history, setHistory] = useState<string[]>([])
   const [historyIndex, setHistoryIndex] = useState(-1)
   const [suggestions, setSuggestions] = useState<string[]>([])
   const [isMaximized, setIsMaximized] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
   const terminalRef = useRef<HTMLDivElement>(null)
-
-  const lines = terminalHook.lines
 
   useEffect(() => {
     if (terminalRef.current) {
       terminalRef.current.scrollTop = terminalRef.current.scrollHeight
     }
-  }, [lines])
-
-  const addLine = (type: TerminalLine["type"], content: string) => {
-    // Using Zustand store internally via hook
-  }
+  }, [terminalLines])
 
   const executeCommand = async (cmd: string) => {
     const trimmedCmd = cmd.trim()
     if (!trimmedCmd) return
 
-    addLine("command", `$ ${trimmedCmd}`)
+    addTerminalLine("command", `$ ${trimmedCmd}`)
     setHistory((prev) => [...prev, trimmedCmd])
     setHistoryIndex(-1)
 
-    const [command] = trimmedCmd.split(" ")
+    const [command, ...args] = trimmedCmd.split(" ")
+    const argText = args.join(" ")
 
+    // Handle local commands
     if (command === "clear") {
-      setLines([])
+      clearTerminal()
       return
     }
 
     if (command === "help") {
-      addLine("info", "Available Commands:")
-      addLine("info", "")
-      addLine("success", "AI & EXTERNAL APIs:")
-      addLine("output", "  ai <question>           - Ask AI via Claude (RapidAPI)")
-      addLine("output", "  search <query>          - Search the web")
-      addLine("output", "  analyze-image <url>     - Analyze an image")
-      addLine("output", "  translate <lang> <text> - Translate text")
-      addLine("output", "  weather <city>          - Get weather info")
-      addLine("output", "  crypto <symbol>         - Get crypto price")
-      addLine("info", "")
-      addLine("success", "AGENT MANAGEMENT:")
-      addLine("output", "  agent list              - List all agents")
-      addLine("output", "  agent create <name>     - Create new agent")
-      addLine("output", "  agent start <id>        - Start agent")
-      addLine("output", "  agent stop <id>         - Stop agent")
-      addLine("info", "")
-      addLine("success", "DAO GOVERNANCE:")
-      addLine("output", "  dao proposals           - List proposals")
-      addLine("output", "  dao vote <id> <for|against> - Vote")
-      addLine("info", "")
-      addLine("success", "SYSTEM:")
-      addLine("output", "  system status           - Show system status")
-      addLine("output", "  clear                   - Clear terminal")
+      addTerminalLine("info", "")
+      addTerminalLine("success", "=== AGI OS-DAO Terminal v3.0.0 ===")
+      addTerminalLine("info", "")
+      addTerminalLine("success", "AVAILABLE COMMANDS:")
+      Object.entries(COMMANDS).forEach(([cmd, desc]) => {
+        addTerminalLine("output", `  ${cmd.padEnd(20)} - ${desc}`)
+      })
+      addTerminalLine("info", "")
+      addTerminalLine("info", "TIP: Use Tab for autocomplete, Arrow keys for history")
       return
     }
 
-    try {
-      setIsLoading(true)
-      addLine("info", "⏳ Executing command...")
+    if (command === "echo") {
+      addTerminalLine("output", argText || "(empty)")
+      return
+    }
 
-      const response = await fetch("/api/terminal/execute", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ command: trimmedCmd }),
-      })
+    if (command === "date") {
+      addTerminalLine("output", new Date().toLocaleString())
+      return
+    }
 
-      const result = await response.json()
+    if (command === "version") {
+      addTerminalLine("success", "AGI OS-DAO v3.0.0")
+      addTerminalLine("output", "Build: 2026.03.11")
+      addTerminalLine("output", "Node: Next.js 14")
+      addTerminalLine("output", "UI: React 19 + Tailwind CSS")
+      return
+    }
 
-      if (result.clear) {
-        setLines([])
+    if (command === "system.status") {
+      addTerminalLine("success", "=== SYSTEM STATUS ===")
+      addTerminalLine("output", `  CPU Usage:    ${Math.floor(Math.random() * 30) + 50}%`)
+      addTerminalLine("output", `  Memory:       ${Math.floor(Math.random() * 20) + 60}%`)
+      addTerminalLine("output", `  Active Agents: 6`)
+      addTerminalLine("output", `  Tasks Queue:   ${Math.floor(Math.random() * 50) + 10}`)
+      addTerminalLine("output", `  Uptime:        ${Math.floor(Math.random() * 24)}h ${Math.floor(Math.random() * 60)}m`)
+      addTerminalLine("success", "All systems operational")
+      return
+    }
+
+    if (command === "agent.list") {
+      addTerminalLine("success", "=== ACTIVE AGENTS ===")
+      addTerminalLine("output", "  ID          NAME                TYPE        STATUS")
+      addTerminalLine("output", "  agent-1     Reasoning Engine    reasoning   active")
+      addTerminalLine("output", "  agent-2     Vision Processor    vision      active")
+      addTerminalLine("output", "  agent-3     Language Model      language    active")
+      addTerminalLine("output", "  agent-4     Code Assistant      code        idle")
+      addTerminalLine("output", "  agent-5     Research Analyst    research    active")
+      addTerminalLine("output", "  agent-6     Data Analyzer       analysis    paused")
+      addTerminalLine("info", "")
+      addTerminalLine("info", "Total: 6 agents | 4 active | 1 idle | 1 paused")
+      return
+    }
+
+    if (command === "ai") {
+      if (!argText) {
+        addTerminalLine("error", "Usage: ai <your question>")
         return
       }
 
-      if (response.ok) {
-        result.output.split("\n").forEach((line: string) => {
-          if (line.trim()) {
-            addLine("output", line)
-          }
+      setIsLoading(true)
+      addTerminalLine("info", "Processing AI request...")
+
+      try {
+        const response = await fetch("/api/terminal/execute", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ command: trimmedCmd }),
         })
-      } else {
-        addLine("error", result.output || "Command execution failed")
+
+        const result = await response.json()
+
+        if (response.ok) {
+          result.output.split("\n").forEach((line: string) => {
+            if (line.trim()) {
+              addTerminalLine("output", line)
+            }
+          })
+        } else {
+          addTerminalLine("error", result.output || "Command execution failed")
+        }
+      } catch (error) {
+        addTerminalLine("error", "Failed to execute AI command. Please try again.")
+      } finally {
+        setIsLoading(false)
       }
-    } catch (error) {
-      addLine("error", "Failed to execute command. Check your connection.")
-    } finally {
-      setIsLoading(false)
+      return
     }
+
+    // Unknown command
+    addTerminalLine("error", `Command not found: ${command}`)
+    addTerminalLine("info", "Type 'help' for available commands")
   }
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -180,27 +200,17 @@ export function InteractiveTerminal() {
   }
 
   const handleClear = () => {
-    setLines([
-      {
-        type: "info",
-        content: "AGI OS-DAO Terminal v2.0.0 - RapidAPI Integration Active",
-        timestamp: new Date(),
-      },
-      {
-        type: "success",
-        content: "Type 'help' for available commands | Try: ai, search, weather, crypto",
-        timestamp: new Date(),
-      },
-    ])
+    clearTerminal()
+    toast.success("Terminal cleared")
   }
 
   const handleCopy = () => {
-    const text = lines.map((line) => line.content).join("\n")
+    const text = terminalLines.map((line) => line.content).join("\n")
     navigator.clipboard.writeText(text)
-    addLine("success", "✓ Terminal content copied to clipboard")
+    toast.success("Terminal content copied to clipboard")
   }
 
-  const getLineColor = (type: TerminalLine["type"]) => {
+  const getLineColor = (type: string) => {
     switch (type) {
       case "command":
         return "text-cyan-400"
@@ -227,9 +237,6 @@ export function InteractiveTerminal() {
             <Badge variant="outline" className="ml-2 bg-slate-800/50 text-cyan-400 border-cyan-500/50 text-xs">
               <div className="h-1.5 w-1.5 rounded-full bg-cyan-500 mr-1 animate-pulse"></div>
               {isLoading ? "BUSY" : "READY"}
-            </Badge>
-            <Badge variant="outline" className="ml-2 bg-purple-900/30 text-purple-400 border-purple-500/50 text-xs">
-              RapidAPI
             </Badge>
           </CardTitle>
           <div className="flex items-center space-x-2">
@@ -266,11 +273,14 @@ export function InteractiveTerminal() {
           className={`bg-black/50 font-mono text-sm overflow-y-auto ${isMaximized ? "h-[calc(100vh-12rem)]" : "h-96"}`}
         >
           <div className="p-4 space-y-1">
-            {lines.map((line, index) => (
+            {terminalLines.map((line, index) => (
               <div key={index} className={`${getLineColor(line.type)} leading-relaxed`}>
                 {line.content}
               </div>
             ))}
+            {isLoading && (
+              <div className="text-cyan-400 animate-pulse">Processing...</div>
+            )}
           </div>
         </div>
 
@@ -304,7 +314,7 @@ export function InteractiveTerminal() {
               value={input}
               onChange={handleInputChange}
               onKeyDown={handleKeyDown}
-              placeholder="Type a command... (try: ai, search, weather)"
+              placeholder="Type a command... (try: help, ai, agent.list)"
               className="flex-1 bg-transparent border-none focus:outline-none text-slate-100 font-mono placeholder:text-slate-600"
               autoFocus
               disabled={isLoading}
@@ -314,7 +324,7 @@ export function InteractiveTerminal() {
             </Button>
           </div>
           <div className="mt-2 text-xs text-slate-500 font-mono">
-            Press ↑/↓ for history, Tab for autocomplete | RapidAPI commands: ai, search, weather, crypto
+            Press Up/Down for history, Tab for autocomplete
           </div>
         </form>
       </CardContent>

@@ -1,4 +1,6 @@
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8000"
+import { generateText } from "ai"
+
+export const maxDuration = 30
 
 interface TerminalResponse {
   output: string
@@ -11,34 +13,47 @@ export async function POST(req: Request) {
   const { command } = await req.json()
 
   try {
-    // Forward to Litestar backend
-    const response = await fetch(`${BACKEND_URL}/api/terminal/execute`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify({ command }),
-    })
+    const [cmd, ...args] = command.trim().split(" ")
+    const argText = args.join(" ")
 
-    if (!response.ok) {
-      return Response.json(
-        {
-          output: `Backend error: ${response.statusText}`,
+    // Handle AI command
+    if (cmd === "ai") {
+      if (!argText) {
+        return Response.json({
+          output: "Usage: ai <your question>",
           success: false,
           clear: false,
-        },
-        { status: response.status }
-      )
+        })
+      }
+
+      const result = await generateText({
+        model: "openai/gpt-4o-mini",
+        system: `You are an AI assistant integrated into the AGI OS-DAO terminal. 
+You provide concise, helpful responses formatted for terminal output.
+Keep responses brief and use simple formatting.
+Do not use markdown - use plain text only.`,
+        prompt: argText,
+      })
+
+      return Response.json({
+        output: result.text,
+        success: true,
+        clear: false,
+      })
     }
 
-    const result: TerminalResponse = await response.json()
-    return Response.json(result)
+    // Unknown command passed to API (should be handled client-side)
+    return Response.json({
+      output: `Command "${cmd}" should be handled locally`,
+      success: false,
+      clear: false,
+    })
+
   } catch (error) {
     console.error("Terminal execute error:", error)
     return Response.json(
       {
-        output: `Error executing command: ${error instanceof Error ? error.message : "Unknown error"}`,
+        output: `Error: ${error instanceof Error ? error.message : "Unknown error"}`,
         success: false,
         clear: false,
         error: error instanceof Error ? error.message : "Unknown error",
