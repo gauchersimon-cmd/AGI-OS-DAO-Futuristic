@@ -1,30 +1,96 @@
-# Futuristic Dashboard
+# AGI OS-DAO v3.0.0
 
-*Automatically synced with your [v0.app](https://v0.app) deployments*
+**Decentralized AI Operating System with DAO Governance**
 
-[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/simon-gauchers-projects/v0-futuristic-dashboard)
-[![Built with v0](https://img.shields.io/badge/Built%20with-v0.app-black?style=for-the-badge)](https://v0.app/chat/projects/UP8NEgpeib0)
+[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com)
+[![Built with v0](https://img.shields.io/badge/Built%20with-v0.app-black?style=for-the-badge)](https://v0.app)
 
-## Overview
+## Quick Start
 
-This repository will stay in sync with your deployed chats on [v0.app](https://v0.app).
-Any changes you make to your deployed app will be automatically pushed to this repository from [v0.app](https://v0.app).
+### Windows
+```batch
+.\start.bat
+```
+
+### Mac/Linux
+```bash
+chmod +x start.sh && ./start.sh
+```
+
+### Manual Installation
+```bash
+git clone https://github.com/gauchersimon-cmd/AGI-OS-DAO-Futuristic.git
+cd AGI-OS-DAO-Futuristic
+pnpm install    # or npm install / yarn
+pnpm dev        # Opens http://localhost:3000
+```
+
+## Features
+
+| Feature | Description |
+|---------|-------------|
+| **6 AI Agents** | Reasoning, Vision, Language, Code, Research, Analysis |
+| **Terminal** | Built-in commands + AI queries |
+| **DAO Governance** | Community voting & proposals |
+| **Analytics** | Real-time metrics with Recharts |
+| **Marketplace** | Extensible tools system |
+| **Memory** | Knowledge base management |
+
+## Environment Variables
+
+Create `.env.local` at project root:
+
+```env
+# AI Features (optional - demo mode works without)
+OPENAI_API_KEY=sk-your-key-here
+
+# Database (optional - uses mock data without)
+NEXT_PUBLIC_SUPABASE_URL=https://xxx.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ...
+```
+
+**Get OpenAI Key:** https://platform.openai.com/api-keys
 
 ## Deployment
 
-Your project is live at:
+### Vercel (Recommended)
+1. Fork/clone this repo
+2. Import in [Vercel](https://vercel.com/new)
+3. Add env variables in Settings > Environment Variables
+4. Deploy!
 
-**[https://vercel.com/simon-gauchers-projects/v0-futuristic-dashboard](https://vercel.com/simon-gauchers-projects/v0-futuristic-dashboard)**
+### Self-hosted
+```bash
+pnpm build && pnpm start
+```
 
-## Build your app
+### Docker
+```bash
+docker-compose up
+```
 
-Continue building your app on:
+## Tech Stack
 
-**[https://v0.app/chat/projects/UP8NEgpeib0](https://v0.app/chat/projects/UP8NEgpeib0)**
+- **Framework:** Next.js 14 + React 19
+- **AI:** AI SDK 5 + OpenAI
+- **Styling:** TailwindCSS + shadcn/ui
+- **Animations:** Framer Motion
+- **State:** Zustand + TanStack Query
+- **Charts:** Recharts
 
-## How It Works
+## Compatibility
 
-1. Create and modify your project using [v0.app](https://v0.app)
-2. Deploy your chats from the v0 interface
-3. Changes are automatically pushed to this repository
-4. Vercel deploys the latest version from this repository
+| Platform | Status |
+|----------|--------|
+| Windows 10/11 | Tested |
+| macOS 12+ | Tested |
+| Ubuntu 20.04+ | Tested |
+| Node.js 18+ | Required |
+
+## In-App Help
+
+Visit `/setup` in the app for interactive installation guide.
+
+---
+
+MIT License | [GitHub](https://github.com/gauchersimon-cmd/AGI-OS-DAO-Futuristic)

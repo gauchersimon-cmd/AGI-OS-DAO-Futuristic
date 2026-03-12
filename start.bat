@@ -1,26 +1,33 @@
 @echo off
-REM AGI-OS-DAO Start Script for Windows
-
+title AGI OS-DAO v3.0 - Windows
+color 0B
 echo.
-echo Starting AGI-OS-DAO Servers...
+echo  ========================================
+echo    AGI OS-DAO v3.0.0 - Windows Setup
+echo  ========================================
 echo.
 
-REM Start FastAPI backend in new window
-echo Starting FastAPI backend on port 8000...
-start cmd /k "cd backend && venv\Scripts\activate && python main.py"
+where node >nul 2>nul
+if %ERRORLEVEL% NEQ 0 (
+    echo [ERROR] Node.js requis! https://nodejs.org
+    pause
+    exit /b 1
+)
 
-REM Wait a bit for backend to start
-timeout /t 3 /nobreak
+where pnpm >nul 2>nul
+if %ERRORLEVEL% EQU 0 (set PKG=pnpm) else (set PKG=npm)
 
-REM Start Next.js frontend in new window
-echo Starting Next.js frontend on port 3000...
-start cmd /k "pnpm dev"
+echo [INFO] Package manager: %PKG%
 
+if not exist "node_modules" (
+    echo [1/2] Installation des dependances...
+    %PKG% install
+)
+
+echo [2/2] Demarrage du serveur...
 echo.
-echo ✅ Both servers are starting!
+echo  http://localhost:3000
+echo  Ctrl+C pour arreter
 echo.
-echo Access:
-echo - Frontend: http://localhost:3000
-echo - Backend API: http://localhost:8000
-echo - API Docs: http://localhost:8000/docs
-echo.
+start http://localhost:3000
+%PKG% run dev

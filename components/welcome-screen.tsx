@@ -5,6 +5,7 @@ import { useCallback } from 'react'
 import { Button } from '@/components/ui/button'
 import { Zap, Brain, Network, Sparkles } from 'lucide-react'
 import { toast } from 'sonner'
+import Link from 'next/link'
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -129,9 +130,18 @@ export function WelcomeScreen({ onContinue }: WelcomeScreenProps) {
         </motion.div>
       </motion.div>
 
+      {/* Setup Link */}
+      <motion.div variants={itemVariants} className="mt-8">
+        <Link href="/setup">
+          <Button variant="ghost" className="text-cyan-400/70 hover:text-cyan-400">
+            Guide d'installation (Windows/Mac/Linux)
+          </Button>
+        </Link>
+      </motion.div>
+
       {/* Version */}
-      <motion.p variants={itemVariants} className="mt-12 text-xs text-cyan-400/50">
-        AGI OS-DAO v3.0.0 • March 11, 2026 • Free Tier Edition
+      <motion.p variants={itemVariants} className="mt-4 text-xs text-cyan-400/50">
+        AGI OS-DAO v3.0.0 • Cross-Platform Edition • Demo Mode Available
       </motion.p>
     </motion.div>
   )

@@ -1,55 +1,23 @@
 #!/bin/bash
-
-# AGI-OS-DAO Start Script
-
 echo ""
-echo "🚀 Starting AGI-OS-DAO Services..."
-echo ""
+echo "========================================"
+echo "  AGI OS-DAO v3.0.0 - Mac/Linux"
+echo "========================================"
 
-# Colors for output
-GREEN='\033[0;32m'
-BLUE='\033[0;34m'
-NC='\033[0m' # No Color
+command -v node &>/dev/null || { echo "[ERROR] Node.js requis!"; exit 1; }
 
-# Start backend
-echo -e "${BLUE}Starting FastAPI backend on port 8000...${NC}"
-cd backend
+PKG="npm"
+command -v pnpm &>/dev/null && PKG="pnpm"
+command -v yarn &>/dev/null && PKG="yarn"
 
-# Activate virtual environment
-if [[ "$OSTYPE" == "msys" || "$OSTYPE" == "cygwin" ]]; then
-    source venv/Scripts/activate
-else
-    source venv/bin/activate
-fi
+echo "[INFO] Package manager: $PKG"
 
-# Start FastAPI in background
-python main.py &
-BACKEND_PID=$!
+[ ! -d "node_modules" ] && { echo "[1/2] Installation..."; $PKG install; }
 
-cd ..
+echo "[2/2] Demarrage..."
+echo "  http://localhost:3000"
 
-# Wait for backend to start
-sleep 2
+[[ "$OSTYPE" == "darwin"* ]] && open http://localhost:3000 &
+[[ "$OSTYPE" == "linux-gnu"* ]] && xdg-open http://localhost:3000 &>/dev/null &
 
-# Start frontend
-echo -e "${BLUE}Starting Next.js frontend on port 3000...${NC}"
-if command -v pnpm &> /dev/null; then
-    pnpm dev &
-else
-    npm run dev &
-fi
-FRONTEND_PID=$!
-
-echo ""
-echo -e "${GREEN}✅ Both services are running!${NC}"
-echo ""
-echo "Access:"
-echo "  - Frontend: http://localhost:3000"
-echo "  - API: http://localhost:8000"
-echo "  - API Docs: http://localhost:8000/docs"
-echo ""
-echo "Press Ctrl+C to stop both services..."
-echo ""
-
-# Wait for both processes
-wait $BACKEND_PID $FRONTEND_PID
+$PKG run dev
