@@ -1,42 +1,53 @@
-import { streamText } from "ai"
-import { createOpenAI } from "@ai-sdk/openai"
-
 export const maxDuration = 30
 
-// Use @ai-sdk/openai directly (no Vercel Gateway - fixes zod v4 error)
-const openai = createOpenAI({ apiKey: process.env.OPENAI_API_KEY || "demo" })
-
 const PROMPTS: Record<string, string> = {
-  reasoning: "Tu es un Agent Raisonnement. Analyse logique, decomposition de problemes, explication claire.",
+  reasoning: "Tu es un Agent Raisonnement dans AGI OS-DAO. Analyse logique, decomposition de problemes, raisonnement etape par etape.",
   vision: "Tu es un Agent Vision. Analyse visuelle, patterns, concepts de design.",
   language: "Tu es un Agent Language. NLP, traduction, analyse grammaticale.",
   code: "Tu es un Agent Code. Code propre, debug, review, tous langages.",
-  research: "Tu es un Agent Recherche. Synthese, verification, analyse approfondie.",
-  analysis: "Tu es un Agent Data. Stats, patterns, tendances, insights.",
+  research: "Tu es un Agent Recherche. Synthese, verification des faits, analyse approfondie.",
+  analysis: "Tu es un Agent Data. Stats, patterns, tendances, insights actionables.",
 }
 
 export async function POST(req: Request) {
-  try {
-    const { messages, agentId, specialization } = await req.json()
-    const system = PROMPTS[specialization?.toLowerCase()] || `Agent ${agentId} - ${specialization || 'general'}`
+  const { messages, agentId, specialization } = await req.json()
+  const system = PROMPTS[specialization?.toLowerCase()] || `Agent IA specialise en ${specialization || 'general'}`
 
-    // Demo mode if no API key
-    if (!process.env.OPENAI_API_KEY) {
-      const demo = `[Mode Demo] Je suis ${agentId} (${specialization}).\n\nPour activer l'IA:\n1. Settings > Vars\n2. Ajoute OPENAI_API_KEY\n\nOu visite /setup pour le guide complet!`
-      const encoder = new TextEncoder()
-      return new Response(new ReadableStream({
-        start(c) { c.enqueue(encoder.encode(`0:"${demo.replace(/\n/g, '\\n')}"\n`)); c.close() }
-      }), { headers: { "Content-Type": "text/plain" } })
-    }
-
-    const result = streamText({
-      model: openai("gpt-4o-mini"),
-      system,
-      messages: (messages || []).map((m: any) => ({ role: m.role, content: String(m.content || '') })),
+  // Demo mode sans API key
+  if (!process.env.OPENAI_API_KEY) {
+    return Response.json({
+      id: `demo-${Date.now()}`,
+      role: "assistant",
+      content: `**Mode Demo Actif**\n\nJe suis **${agentId}** (${specialization}).\n\nPour activer l'IA complete:\n1. Clique sur **Settings** (icone engrenage en haut)\n2. Va dans **Vars**\n3. Ajoute \`OPENAI_API_KEY\` avec ta cle OpenAI\n\nOu deploie sur Vercel et ajoute la variable la-bas!\n\n---\n*Ton message etait: "${messages?.[messages.length-1]?.content || 'vide'}"*`
     })
-
-    return result.toDataStreamResponse()
-  } catch (e) {
-    return Response.json({ error: String(e) }, { status: 500 })
   }
+
+  // Appel direct OpenAI API (pas de SDK = pas de conflit zod)
+  const response = await fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
+    },
+    body: JSON.stringify({
+      model: "gpt-4o-mini",
+      messages: [
+        { role: "system", content: system },
+        ...(messages || []).map((m: any) => ({ role: m.role, content: String(m.content || "") }))
+      ],
+      stream: false,
+    }),
+  })
+
+  if (!response.ok) {
+    const err = await response.text()
+    return Response.json({ error: `OpenAI error: ${err}` }, { status: 500 })
+  }
+
+  const data = await response.json()
+  return Response.json({
+    id: data.id,
+    role: "assistant",
+    content: data.choices?.[0]?.message?.content || "Pas de reponse"
+  })
 }

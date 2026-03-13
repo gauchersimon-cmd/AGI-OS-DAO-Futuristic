@@ -1,9 +1,4 @@
-import { generateText } from "ai"
-import { createOpenAI } from "@ai-sdk/openai"
-
 export const maxDuration = 30
-
-const openai = createOpenAI({ apiKey: process.env.OPENAI_API_KEY || "demo" })
 
 export async function POST(req: Request) {
   const { command } = await req.json()
@@ -23,11 +18,17 @@ export async function POST(req: Request) {
 
   if (cmd === "ai") {
     if (!argText) return json("Usage: ai <question>", false)
-    if (!process.env.OPENAI_API_KEY) return json("[Demo] Configure OPENAI_API_KEY pour activer l'IA")
-    try {
-      const { text } = await generateText({ model: openai("gpt-4o-mini"), prompt: argText, maxTokens: 500 })
-      return json(text)
-    } catch (e) { return json(`Erreur: ${e}`, false) }
+    if (!process.env.OPENAI_API_KEY) return json("[Demo] Configure OPENAI_API_KEY pour l'IA. Va dans Settings > Vars")
+    
+    // Direct OpenAI call (no SDK)
+    const res = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Authorization": `Bearer ${process.env.OPENAI_API_KEY}` },
+      body: JSON.stringify({ model: "gpt-4o-mini", messages: [{ role: "user", content: argText }], max_tokens: 500 }),
+    })
+    if (!res.ok) return json(`OpenAI error: ${await res.text()}`, false)
+    const data = await res.json()
+    return json(data.choices?.[0]?.message?.content || "Pas de reponse")
   }
 
   return json(`Commande inconnue: ${cmd}. Tape 'help'`, false)
