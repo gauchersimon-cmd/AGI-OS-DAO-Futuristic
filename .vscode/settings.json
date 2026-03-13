@@ -1,74 +1,90 @@
 {
-  // Editor
-  "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "editor.rulers": [80, 120],
-  "editor.wordWrap": "on",
-  "editor.fontSize": 13,
-  "editor.fontFamily": "Fira Code, 'Courier New', monospace",
-
-  // Python
-  "[python]": {
-    "editor.defaultFormatter": "ms-python.python",
-    "editor.formatOnSave": true,
-    "editor.codeActionsOnSave": {
-      "source.organizeImports": "explicit"
-    }
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
   },
-  "python.linting.enabled": true,
-  "python.linting.pylintEnabled": true,
-  "python.formatting.provider": "black",
-  "python.formatting.blackArgs": ["--line-length=100"],
-
-  // TypeScript/JavaScript
-  "[typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.formatOnSave": true,
-    "editor.codeActionsOnSave": {
-      "source.fixAll.eslint": "explicit"
-    }
-  },
-  "[javascript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.formatOnSave": true
-  },
-  "[json]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-
-  // Files
-  "files.exclude": {
-    "**/__pycache__": true,
-    "**/*.pyc": true,
-    "**/node_modules": true,
-    "**/.next": true,
-    "**/.vercel": true
-  },
-  "files.watcherExclude": {
-    "**/.git/objects/**": true,
-    "**/.git/subtree-cache/**": true,
-    "**/node_modules/**": true,
-    "**/.next/**": true
-  },
-
-  // Search
-  "search.exclude": {
-    "**/node_modules": true,
-    "**/.next": true,
-    "**/dist": true,
-    "**/__pycache__": true
-  },
-
-  // Git
-  "git.autofetch": true,
-  "git.autorefresh": true,
-
-  // Extensions
-  "prettier.semi": true,
-  "prettier.singleQuote": false,
-  "prettier.trailingComma": "es5",
   "typescript.tsdk": "node_modules/typescript/lib",
-  
-  // Pylance
-  "python.analysis.typeCheckingMode": "basic"
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+
+  // Git — communication VS Code ↔ GitHub
+  "git.autofetch": true,
+  "git.autofetchPeriod": 60,
+  "git.enableSmartCommit": true,
+  "git.confirmSync": false,
+  "git.postCommitCommand": "sync",
+  "git.openRepositoryInParentFolders": "always",
+  "gitHistory.pageSize": 20,
+
+  // GitHub PR & Issues extension
+  "githubPullRequests.createOnPublishBranch": "ask",
+  "githubPullRequests.defaultMergeMethod": "squash",
+
+  // GitHub Copilot
+  "github.copilot.enable": {
+    "*": true,
+    "plaintext": true,
+    "markdown": true
+  },
+
+  // MCP — GitHub + Vercel tools
+  "mcp": {
+    "servers": {
+      "github": {
+        "command": "npx",
+        "args": ["-y", "@modelcontextprotocol/server-github"],
+        "env": {
+          "GITHUB_PERSONAL_ACCESS_TOKEN": "${env:GITHUB_TOKEN}"
+        }
+      },
+      "filesystem": {
+        "command": "npx",
+        "args": [
+          "-y",
+          "@modelcontextprotocol/server-filesystem",
+          "E:\\VSCode-Workspace\\projects\\AGI-OS-DAO-Futuristic"
+        ]
+      }
+    }
+  },
+
+  // Terminal Windows PowerShell
+  "terminal.integrated.defaultProfile.windows": "PowerShell",
+  "terminal.integrated.profiles.windows": {
+    "PowerShell": {
+      "source": "PowerShell",
+      "icon": "terminal-powershell"
+    },
+    "WSL": {
+      "path": "wsl.exe",
+      "args": ["-d", "Ubuntu"]
+    }
+  },
+  "terminal.integrated.cwd": "E:\\VSCode-Workspace\\projects\\AGI-OS-DAO-Futuristic",
+
+  // Next.js / TypeScript
+  "[typescript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[typescriptreact]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[json]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+
+  // Afficher les fichiers importants
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.patterns": {
+    "package.json": "pnpm-lock.yaml, .npmrc, .nvmrc",
+    "tailwind.config.*": "postcss.config.*",
+    "*.tsx": "${capture}.test.tsx, ${capture}.stories.tsx"
+  },
+
+  // Workspace couleurs AGI-OS
+  "workbench.colorCustomizations": {
+    "titleBar.activeBackground": "#0d1117",
+    "titleBar.activeForeground": "#a78bfa",
+    "statusBar.background": "#7c3aed",
+    "statusBar.foreground": "#ffffff",
+    "activityBar.background": "#0d1117",
+    "sideBar.background": "#111827"
+  },
+
+  "workbench.colorTheme": "Default Dark Modern",
+  "workbench.iconTheme": "material-icon-theme"
 }
