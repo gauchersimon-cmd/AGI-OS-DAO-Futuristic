@@ -1,0 +1,61 @@
+{
+  "models": [
+    {
+      "title": "DeepSeek V3 (Free via OpenRouter)",
+      "provider": "openrouter",
+      "model": "deepseek/deepseek-chat",
+      "apiKey": "YOUR_OPENROUTER_API_KEY",
+      "description": "Gratuit - Meilleur pour TypeScript/Next.js"
+    },
+    {
+      "title": "Llama 3.3 70B (Free via OpenRouter)",
+      "provider": "openrouter",
+      "model": "meta-llama/llama-3.3-70b-instruct:free",
+      "apiKey": "YOUR_OPENROUTER_API_KEY",
+      "description": "Gratuit - Solide pour Python/Litestar backend"
+    },
+    {
+      "title": "Ollama Local (100% Gratuit)",
+      "provider": "ollama",
+      "model": "codellama:7b",
+      "description": "Local - Privé, aucun coût, nécessite Ollama installé"
+    }
+  ],
+  "tabAutocompleteModel": {
+    "title": "DeepSeek Coder (Autocomplete)",
+    "provider": "openrouter",
+    "model": "deepseek/deepseek-coder:free",
+    "apiKey": "YOUR_OPENROUTER_API_KEY"
+  },
+  "embeddingsProvider": {
+    "provider": "transformers.js",
+    "description": "Local embeddings - aucun coût"
+  },
+  "contextProviders": [
+    { "name": "code", "params": {} },
+    { "name": "docs", "params": {} },
+    { "name": "diff", "params": {} },
+    { "name": "folder", "params": {} },
+    { "name": "codebase", "params": {} }
+  ],
+  "slashCommands": [
+    { "name": "edit", "description": "Edit code in current file" },
+    { "name": "comment", "description": "Add comments to code" },
+    { "name": "share", "description": "Share conversation" },
+    { "name": "cmd", "description": "Generate terminal command" },
+    { "name": "test", "description": "Generate unit tests" }
+  ],
+  "customCommands": [
+    {
+      "name": "agi-review",
+      "prompt": "Review this code for the AGI-OS-DAO project. Check for TypeScript best practices, Next.js patterns, and any issues with the multi-agent orchestration logic.",
+      "description": "AGI-OS code review"
+    },
+    {
+      "name": "dao-agent",
+      "prompt": "Suggest improvements for this DAO governance code. Focus on security, decentralization, and smart contract best practices.",
+      "description": "DAO governance helper"
+    }
+  ],
+  "allowAnonymousTelemetry": false
+}
